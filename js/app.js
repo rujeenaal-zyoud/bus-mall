@@ -155,6 +155,7 @@ function UserClick(event) {
                 shownArr.push(Mall.allMall[i].timesShowen);
 
             }
+            chart();
                 button.removeEventListener('click', selectClike);
 
             
