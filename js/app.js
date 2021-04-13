@@ -8,14 +8,19 @@ let rightImageElement = document.getElementById('right-image');
 let images = document.getElementById('images');
 
 let maxAttempts = 25;
-
 let userAttemptsCounter = 0;
+
+
+
+let temporaryArry = [];
 
 let leftImageIndex;
 let middleImageIndex;
 let rightImageIndex;
 const names = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'tauntaun', 'unicorn', 'water-can', 'wine-glass'];
-
+let shownArr = [];
+let namesArr = [];
+let votesArr = [];
 
 // create constracter
 
@@ -28,6 +33,8 @@ function Mall(name, source) {
     Mall.allMall.push(this)
 }
 // create array
+//Mall.firstarray=[];
+
 Mall.allMall = [];
 new Mall('bag', 'assets/bag.jpg');
 new Mall('banana', 'assets/banana.jpg');
@@ -71,8 +78,11 @@ function renderThreeImages() {
         rightImageIndex = generateRandomIndex();
         middleImageIndex = generateRandomIndex();
 
+      leftImageIndex = generateRandomIndex();
+
 
     }
+
     console.log(Mall.allMall[leftImageIndex].source);
     console.log(Mall.allMall[middleImageIndex].source);
     console.log(Mall.allMall[rightImageIndex].source);
@@ -84,8 +94,15 @@ function renderThreeImages() {
     Mall.allMall[leftImageIndex].timesShowen++;
     Mall.allMall[middleImageIndex].timesShowen++;
     Mall.allMall[rightImageIndex].timesShowen++;
+    //create temporary array to push 3 images without repeat it 
+    temporaryArry = [];
+    temporaryArry.push(leftImageIndex, middleImageIndex, rightImageIndex);
+    console.log("temporary", temporaryArry);
 
 }
+
+//console.log(leftImageIndex);
+
 
 
 renderThreeImages();
@@ -99,60 +116,96 @@ images.addEventListener('click', UserClick);
 function UserClick(event) {
     userAttemptsCounter++;
     // if (event.target.id !== 'images') {
-        if (userAttemptsCounter <= maxAttempts) {
-            if (event.target.id === 'left-image') {
-                Mall.allMall[leftImageIndex].votes++;
-            } else if (event.target.id === 'middle-image') {
-                Mall.allMall[middleImageIndex].votes++;
-            }
-            else { Mall.allMall[leftImageIndex].votes++; }
-            console.log(Mall.allMall);
-        
+    if (userAttemptsCounter <= maxAttempts) {
+        if (event.target.id === 'left-image') {
+            Mall.allMall[leftImageIndex].votes++;
+        } else if (event.target.id === 'middle-image') {
+            Mall.allMall[middleImageIndex].votes++;
+        }
+        else { Mall.allMall[leftImageIndex].votes++; }
+        console.log(Mall.allMall);
+
 
         renderThreeImages();
     }
     else {
+       
+
+        //let ctx = document.getElementById('myChart').getContext('2d');
 
         let results = document.getElementById('button');
-        let  button = document.createElement('button');
-     results.appendChild(button);
-     button.textContent="View Results";
+        let button = document.createElement('button');
+        results.appendChild(button);
+      
+        button.textContent = "View Results";
         button.addEventListener('click', selectClike);
-
+//render the list
         function selectClike(event) {
             let list = document.getElementById('results-list');
-            let mallResult=0;
+            let mallResult = 0;
             for (let i = 0; i < Mall.allMall.length; i++) {
-                //votes.push(Mall.allMall[i].votes);
-               //timesShowen.push(Mall.allMall[i].timesShowen);
+        
                 mallResult = document.createElement('li');
-
                 list.appendChild(mallResult);
                 mallResult.textContent = `${Mall.allMall[i].name} has ${Mall.allMall[i].votes} votes,and was seen ${Mall.allMall[i].timesShowen} times.`;
             }
 
+            for (let i = 0; i < Mall.allMall.length; i++) {
+                votesArr.push(Mall.allMall[i].votes);
+                shownArr.push(Mall.allMall[i].timesShowen);
+
+            }
+                button.removeEventListener('click', selectClike);
+
+            
+            //
+
         }
+
         images.removeEventListener('click', UserClick);
 
 
-
     }
-
 }
 
 
 
+// chart.js from  samer demo 
+function chart() {
+    let ctx = document.getElementById('myChart').getContext('2d');
+    let chart = new Chart(ctx, {
+        // what type is the chart
+        type: 'bar',
 
-//  UserClick();
+        //  the data for showing
+        data: {
+            //  for the names
+            labels: namesArr,
 
+            datasets: [
+                {
+                    label: 'Mall votes',
+                    data: votesArr,
+                    backgroundColor: [
+                        'rgb(251, 93, 76)',
+                    ],
 
+                    borderWidth: 1
+                },
 
+                {
+                    label: 'Mall shown',
+                    data: shownArr,
+                    backgroundColor: [
+                        'black',
+                    ],
 
+                    borderWidth: 1
+                }
 
+            ]
+        },
+        options: {}
+    });
 
-
-
-//craete button
-
-
-
+}
