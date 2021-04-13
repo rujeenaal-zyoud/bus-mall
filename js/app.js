@@ -12,14 +12,15 @@ let userAttemptsCounter = 0;
 
 
 
+let temporaryArry = [];
 
 let leftImageIndex;
 let middleImageIndex;
 let rightImageIndex;
 const names = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'tauntaun', 'unicorn', 'water-can', 'wine-glass'];
-  let shownArr=[];
-  let namesArr =[];
-   let votesArr=[];
+let shownArr = [];
+let namesArr = [];
+let votesArr = [];
 
 // create constracter
 
@@ -70,18 +71,16 @@ function generateRandomIndex() {
 console.log(generateRandomIndex);
 
 function renderThreeImages() {
-     let firstarray=[];
     leftImageIndex = generateRandomIndex();
     middleImageIndex = generateRandomIndex();
     rightImageIndex = generateRandomIndex();
     while (leftImageIndex === middleImageIndex || leftImageIndex === rightImageIndex || rightImageIndex === middleImageIndex) {
         rightImageIndex = generateRandomIndex();
         middleImageIndex = generateRandomIndex();
-        
-    // firstarray.push(this);
-    // if (firstarray.length>3){
-    
-        
+
+      leftImageIndex = generateRandomIndex();
+
+
     }
 
     console.log(Mall.allMall[leftImageIndex].source);
@@ -95,10 +94,15 @@ function renderThreeImages() {
     Mall.allMall[leftImageIndex].timesShowen++;
     Mall.allMall[middleImageIndex].timesShowen++;
     Mall.allMall[rightImageIndex].timesShowen++;
-    }
+    //create temporary array to push 3 images without repeat it 
+    temporaryArry = [];
+    temporaryArry.push(leftImageIndex, middleImageIndex, rightImageIndex);
+    console.log("temporary", temporaryArry);
 
-    //console.log(leftImageIndex);
-    
+}
+
+//console.log(leftImageIndex);
+
 
 
 renderThreeImages();
@@ -125,83 +129,83 @@ function UserClick(event) {
         renderThreeImages();
     }
     else {
+       
+
+        //let ctx = document.getElementById('myChart').getContext('2d');
 
         let results = document.getElementById('button');
         let button = document.createElement('button');
         results.appendChild(button);
+      
         button.textContent = "View Results";
         button.addEventListener('click', selectClike);
-
+//render the list
         function selectClike(event) {
             let list = document.getElementById('results-list');
             let mallResult = 0;
             for (let i = 0; i < Mall.allMall.length; i++) {
-                votesArr.push(Mall.allMall[i].votes);
-                shownArr.push(Mall.allMall[i].timesShowen);
+        
                 mallResult = document.createElement('li');
                 list.appendChild(mallResult);
                 mallResult.textContent = `${Mall.allMall[i].name} has ${Mall.allMall[i].votes} votes,and was seen ${Mall.allMall[i].timesShowen} times.`;
             }
 
+            for (let i = 0; i < Mall.allMall.length; i++) {
+                votesArr.push(Mall.allMall[i].votes);
+                shownArr.push(Mall.allMall[i].timesShowen);
+
+            }
+                button.removeEventListener('click', selectClike);
+
+            
+            //
+
         }
-        chart();
-        //button.removeEventListener('click', selectClike);
+
         images.removeEventListener('click', UserClick);
 
 
-
     }
-    //button.removeEventListener('click', selectClike);
 }
 
 
 
-
-
-// chart.js
+// chart.js from  samer demo 
 function chart() {
     let ctx = document.getElementById('myChart').getContext('2d');
-    
-    let chart= new Chart(ctx,{
-      // what type is the chart
-     type: 'bar',
-  
-    //  the data for showing
-     data:{
-      //  for the names
-        labels: namesArr,
-        
-        datasets: [
-          {
-          label: 'Mall votes',
-          data: votesArr,
-          backgroundColor: [
-            'rgb(251, 93, 76)',
-          ],
-    
-          borderWidth: 1
+    let chart = new Chart(ctx, {
+        // what type is the chart
+        type: 'bar',
+
+        //  the data for showing
+        data: {
+            //  for the names
+            labels: namesArr,
+
+            datasets: [
+                {
+                    label: 'Mall votes',
+                    data: votesArr,
+                    backgroundColor: [
+                        'rgb(251, 93, 76)',
+                    ],
+
+                    borderWidth: 1
+                },
+
+                {
+                    label: 'Mall shown',
+                    data: shownArr,
+                    backgroundColor: [
+                        'black',
+                    ],
+
+                    borderWidth: 1
+                }
+
+            ]
         },
-  
-        {
-          label: 'Mall shown',
-          data: shownArr,
-          backgroundColor: [
-            'black',
-          ],
-    
-          borderWidth: 1
-        }
-        
-      ]
-      },
-      options: {}
+        options: {}
     });
-    
-  }
 
-
-
-
-
-
-
+}
