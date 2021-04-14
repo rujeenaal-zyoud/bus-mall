@@ -31,12 +31,46 @@ function Mall(name, source) {
     this.timesShowen = 0;
     //pushing the name into array to can use it in chart
     namesArr.push(this.name);
+// get every product select in mall into allMall array
+    Mall.allMall.push(this);
+    
 
-    Mall.allMall.push(this)
+    
+}
+
+Mall.allMall = [];
+
+//create function for update storge
+function updateStorage(){
+    
+    let arrayString=JSON.stringify(Mall.allMall);
+    console.log(Mall.allMall);
+   console.log(arrayString);
+    //set item by put key and value
+     localStorage.setItem('product',arrayString);
+ }
+
+
+
+function getPruduct(){
+  // get the data from the local storage
+  let data =localStorage.getItem('product');
+  console.log(data);
+
+  // convert data back into a normal array of objects
+  let productData=JSON.parse(data);
+
+  console.log(productData);
+
+  // if the first time we visit the page, there will not be an array of objects inside the local storage so we should handle it here:
+  if (productData !==null) {
+    Mall.allMall=productData;
+  }
+   renderThreeImages();
+
 }
 
 
-Mall.allMall = [];
 new Mall('bag', 'assets/bag.jpg');
 new Mall('banana', 'assets/banana.jpg');
 new Mall('bathroom', 'assets/bathroom.jpg');
@@ -98,10 +132,11 @@ function renderThreeImages() {
     //create temporary array to push 3 images without repeat it 
     temporaryArry = [leftImageIndex, middleImageIndex, rightImageIndex];
     console.log("temporary", temporaryArry);
+    // calling the updateStorge for our voeting and showing  (product)
+
 
 }
 
-//console.log(leftImageIndex);
 
 
 
@@ -157,7 +192,10 @@ function UserClick(event) {
             }
            console.log(votesArr);
            console.log(shownArr);
+           updateStorage();
+
                 button.removeEventListener('click', selectClike);
+                //getPruduct();
 
                 chart();
 
@@ -170,7 +208,6 @@ function UserClick(event) {
 
     }
 }
-
 
 
 // chart.js from  samer demo 
@@ -212,3 +249,4 @@ function chart() {
     });
 
 }
+getPruduct();
