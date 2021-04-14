@@ -17,7 +17,7 @@ let temporaryArry = [];
 let leftImageIndex;
 let middleImageIndex;
 let rightImageIndex;
-const names = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'tauntaun', 'unicorn', 'water-can', 'wine-glass'];
+//const names = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'tauntaun', 'unicorn', 'water-can', 'wine-glass'];
 let shownArr = [];
 let namesArr = [];
 let votesArr = [];
@@ -29,11 +29,12 @@ function Mall(name, source) {
     this.source = source;
     this.votes = 0;
     this.timesShowen = 0;
+    //pushing the name into array to can use it in chart
+    namesArr.push(this.name);
 
     Mall.allMall.push(this)
 }
-// create array
-//Mall.firstarray=[];
+
 
 Mall.allMall = [];
 new Mall('bag', 'assets/bag.jpg');
@@ -74,7 +75,7 @@ function renderThreeImages() {
     leftImageIndex = generateRandomIndex();
     middleImageIndex = generateRandomIndex();
     rightImageIndex = generateRandomIndex();
-    while (leftImageIndex === middleImageIndex || leftImageIndex === rightImageIndex || rightImageIndex === middleImageIndex) {
+    while (leftImageIndex === middleImageIndex || leftImageIndex === rightImageIndex || rightImageIndex === middleImageIndex ||temporaryArry.includes(leftImageIndex)||temporaryArry.includes(middleImageIndex)||temporaryArry.includes(rightImageIndex) ) {
         rightImageIndex = generateRandomIndex();
         middleImageIndex = generateRandomIndex();
 
@@ -95,8 +96,7 @@ function renderThreeImages() {
     Mall.allMall[middleImageIndex].timesShowen++;
     Mall.allMall[rightImageIndex].timesShowen++;
     //create temporary array to push 3 images without repeat it 
-    temporaryArry = [];
-    temporaryArry.push(leftImageIndex, middleImageIndex, rightImageIndex);
+    temporaryArry = [leftImageIndex, middleImageIndex, rightImageIndex];
     console.log("temporary", temporaryArry);
 
 }
@@ -139,7 +139,7 @@ function UserClick(event) {
       
         button.textContent = "View Results";
         button.addEventListener('click', selectClike);
-//render the list
+          //render the list
         function selectClike(event) {
             let list = document.getElementById('results-list');
             let mallResult = 0;
@@ -155,11 +155,13 @@ function UserClick(event) {
                 shownArr.push(Mall.allMall[i].timesShowen);
 
             }
-            chart();
+           console.log(votesArr);
+           console.log(shownArr);
                 button.removeEventListener('click', selectClike);
 
-            
-            //
+                chart();
+
+
 
         }
 
