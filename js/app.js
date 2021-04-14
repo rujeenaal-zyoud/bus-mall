@@ -74,7 +74,7 @@ function renderThreeImages() {
     leftImageIndex = generateRandomIndex();
     middleImageIndex = generateRandomIndex();
     rightImageIndex = generateRandomIndex();
-    while (leftImageIndex === middleImageIndex || leftImageIndex === rightImageIndex || rightImageIndex === middleImageIndex) {
+    while (leftImageIndex === middleImageIndex || leftImageIndex === rightImageIndex || rightImageIndex === middleImageIndex ||temporaryArry.includes(leftImageIndex)||temporaryArry.includes(middleImageIndex)||temporaryArry.includes(rightImageIndex) ) {
         rightImageIndex = generateRandomIndex();
         middleImageIndex = generateRandomIndex();
 
@@ -95,8 +95,7 @@ function renderThreeImages() {
     Mall.allMall[middleImageIndex].timesShowen++;
     Mall.allMall[rightImageIndex].timesShowen++;
     //create temporary array to push 3 images without repeat it 
-    temporaryArry = [];
-    temporaryArry.push(leftImageIndex, middleImageIndex, rightImageIndex);
+    temporaryArry = [leftImageIndex, middleImageIndex, rightImageIndex];
     console.log("temporary", temporaryArry);
 
 }
